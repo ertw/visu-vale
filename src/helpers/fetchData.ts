@@ -29,7 +29,7 @@ const endpointConstructor = ({
 }) => (`${endpoint}/dolar${year ? '/' + year : ''}?apikey=${apiKey}&formato=${format}`)
 
 const makeSingleRequest = async function () {
-    const apiResponse: Promise<DollarsByYear> = await fetch(endpointConstructor({year: '2010'}))
+    const apiResponse: Promise<DollarsByYear> = await fetch(endpointConstructor({ year: '2010' }))
         .then(resp => {
             if (resp.ok) {
                 return resp.json()
