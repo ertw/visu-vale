@@ -55,13 +55,15 @@ export const fetchData = async (): Promise<State> => {
         return ({
             isLoaded: true,
             error: null,
-            dollars
+            dollars,
+            range: [],
         })
     } catch (error) {
         return ({
             isLoaded: false,
             error,
-            dollars: []
+            dollars: [],
+            range: [],
         })
     }
 }
