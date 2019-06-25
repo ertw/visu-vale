@@ -13,6 +13,7 @@ export interface State {
     error: any,
     isLoaded: boolean,
     dollars: Dollars
+    range: Dollars
 }
 
 interface Props { }
@@ -21,7 +22,8 @@ export const AppContext = React.createContext(
     {
         error: null,
         isLoaded: false,
-        dollars: []
+        dollars: [],
+        range: [],
     } as State
 )
 
@@ -32,6 +34,10 @@ const errorStringer = (error: Error) => {
     if (error.message === '422') {
         return "bad request given to api"
     }
+    if (error.message === 'Failed to fetch') {
+        return 'timeout when attempting to fetch data from api'
+    }
+    console.error('-----', error.message, error, '^^^^^')
     return (null)
 }
 
@@ -53,7 +59,8 @@ export class AppStateWrapper extends React.Component<Props, State> {
         this.state = {
             error: null,
             isLoaded: false,
-            dollars: []
+            dollars: [],
+            range: [],
         }
     }
 
@@ -75,7 +82,6 @@ export class AppStateWrapper extends React.Component<Props, State> {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
         }
-        console.log(this.state.dollars)
 
         if (error) {
             return (
