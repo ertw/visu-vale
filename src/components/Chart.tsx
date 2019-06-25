@@ -5,6 +5,7 @@ import {
     ResponsiveContainer,
     YAxis,
     XAxis,
+    Tooltip,
 } from 'recharts'
 
 interface Datum {
@@ -26,6 +27,7 @@ export const Chart = (props: Props) => {
                 <YAxis type="number" domain={['dataMin', 'dataMax']} />
                 <XAxis />
                 <Area dataKey="y" stroke="#8884d8" fill="#8884d8" />
+                <Tooltip />
             </AreaChart>
         </ResponsiveContainer>
     )
