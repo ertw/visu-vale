@@ -1,6 +1,10 @@
 import * as React from 'react'
 import { fetchData, Dollars } from '../helpers/fetchData'
 import { Chart } from './Chart'
+import { DatePicker, } from 'antd'
+import moment from 'moment'
+import { RangePickerValue } from 'antd/lib/date-picker/interface';
+const { RangePicker, } = DatePicker
 
 export interface State {
     error: any,
@@ -57,6 +61,10 @@ export class AppStateWrapper extends React.Component<Props, State> {
         const average = justDollars.reduce(sum, 0) / justDollars.length
         const minimum = justDollars.reduce(min, Infinity)
         const maximum = justDollars.reduce(max, -Infinity)
+        function onChange(dates: RangePickerValue, dateStrings: [string, string]) {
+            console.log('From: ', dates[0], ', to: ', dates[1]);
+            console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+        }
 
         if (error) {
             return (
@@ -74,6 +82,13 @@ export class AppStateWrapper extends React.Component<Props, State> {
                 <div>Minimum: {minimum}</div>
                 <div>Maximum: {maximum}</div>
                 <div>Current: {justDollars[justDollars.length - 1]}</div>
+                <RangePicker
+                    ranges={{
+                        Today: [moment(), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    }}
+                    onChange={onChange}
+                />
                 <Chart data={justDollars.map((dollar, index) => ({ x: index, y: dollar }))} />
             </React.Fragment>
         )

@@ -38,6 +38,8 @@
 | [create-react-app](https://facebook.github.io/create-react-app/docs/adding-typescript) | increase velocity by lowering cognative load | opinionated |
 | Linux | familiarity, ease of use, pricing | may miss errors in Windows / Mac dev environments |
 | [Recharts](http://recharts.org/en-US) | tested and it works, designed for React, large adoption based on npm package use and github potpularity | unfamiliar, so I might run into unknown unknowns |
+| [ant design](https://ant.design/)| uniform design language, batteries included, increased velocity | opinionated |
+| [moment](https://momentjs.com/)| recommended date parser for antd, large adoption| increased bundle size|
 
 ---
 
