@@ -98,7 +98,6 @@ export class AppStateWrapper extends React.Component<Props, State> {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
         }
-        // Math.abs(moment(babyArr[23].date).diff(moment(babyArr[24].date), 'days'))
         const disabledDate = (current?: moment.Moment) => {
             if (current && current < moment(dollars[0].date)) {
                 return (true)
