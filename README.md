@@ -19,6 +19,12 @@
 1. Run `npm i`
 1. Run `npm start`
 
+### Publishing
+
+1. merge tested dev branch into `stage` and push. Amplify will build and publish to stage
+1. after verifying on [stage](https://stage.erik.cl), merge into `deploy`
+1. verify on [prod](https://deploy.erik.cl)
+
 ### Developer guidelines
 
 * Compiler settings are strict- do not commit any code with warnings or errors!
@@ -40,6 +46,7 @@
 | [Recharts](http://recharts.org/en-US) | tested and it works, designed for React, large adoption based on npm package use and github potpularity | unfamiliar, so I might run into unknown unknowns |
 | [ant design](https://ant.design/)| uniform design language, batteries included, increased velocity | opinionated |
 | [moment](https://momentjs.com/)| recommended date parser for antd, large adoption| increased bundle size|
+| [AWS Amplify](https://aws.amazon.com/amplify/)| ease of use | cost |
 
 ---
 
