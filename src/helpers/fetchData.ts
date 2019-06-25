@@ -7,15 +7,22 @@ interface ErrorResponse {
     Mensaje: "API key no valida" | "Entidad Improcesable" | string
 }
 
-export interface Dollar {
+interface RawDollar {
     Valor: string
     Fecha: string
 }
 
+interface RawDollars extends Array<RawDollar> { }
+
+export interface Dollar {
+    value: number
+    date: string
+}
+
 export interface Dollars extends Array<Dollar> { }
 
-export interface DollarsByYear {
-    Dolares: Dollars
+export interface RawDollarsByYear {
+    Dolares: RawDollars
 }
 
 const endpoint = 'https://api.sbif.cl/api-sbifv3/recursos_api'
@@ -31,7 +38,7 @@ const endpointConstructor = ({
 }) => (`${endpoint}/dolar${anterior && year ? '/anteriores' : ''}${year ? '/' + year : ''}?apikey=${apiKey}&formato=${format}`)
 
 const makeSingleRequest = async function () {
-    const apiResponse: Promise<DollarsByYear> = await fetch(endpointConstructor({ year: '2020', anterior: true }))
+    const apiResponse: Promise<RawDollarsByYear> = await fetch(endpointConstructor({ year: '2020', anterior: true }))
         .then(resp => {
             if (resp.ok) {
                 return resp.json()
@@ -44,11 +51,11 @@ const makeSingleRequest = async function () {
 export const fetchData = async (): Promise<State> => {
     try {
         const dollarsByYear = await makeSingleRequest()
-        const flattenedDollars = dollarsByYear.Dolares
+        const dollars: Dollars = dollarsByYear.Dolares.map((dollar: RawDollar) => ({ value: parseInt(dollar.Valor), date: dollar.Fecha }))
         return ({
             isLoaded: true,
             error: null,
-            dollars: flattenedDollars
+            dollars
         })
     } catch (error) {
         return ({

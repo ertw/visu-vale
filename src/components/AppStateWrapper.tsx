@@ -1,5 +1,8 @@
 import * as React from 'react'
-import { fetchData, Dollars } from '../helpers/fetchData'
+import {
+    fetchData,
+    Dollars,
+} from '../helpers/fetchData'
 import { Chart } from './Chart'
 import { DatePicker, } from 'antd'
 import moment from 'moment'
@@ -35,6 +38,13 @@ const errorStringer = (error: Error) => {
 const sum = (accumulator: number, currentValue: number) => accumulator + currentValue
 const max = (a: number, b: number) => (Math.max(a, b))
 const min = (a: number, b: number) => (Math.min(a, b))
+const getDateRange = (dollars: Dollars, start: string, end: string) => {
+    const getIndex = (date: string) => (dollars.findIndex(dollar => dollar.date === date))
+    return (
+        dollars.slice(getIndex(start), getIndex(end))
+    )
+}
+
 
 
 export class AppStateWrapper extends React.Component<Props, State> {
@@ -57,7 +67,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
 
     render() {
         const { error, isLoaded, dollars } = this.state
-        const justDollars = dollars.map(dollar => parseInt(dollar.Valor))
+        const justDollars = dollars.map(dollar => dollar.value)
         const average = justDollars.reduce(sum, 0) / justDollars.length
         const minimum = justDollars.reduce(min, Infinity)
         const maximum = justDollars.reduce(max, -Infinity)
@@ -65,6 +75,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
         }
+        console.log(this.state.dollars)
 
         if (error) {
             return (
@@ -89,7 +100,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
                     }}
                     onChange={onChange}
                 />
-                <Chart data={justDollars.map((dollar, index) => ({ x: index, y: dollar }))} />
+                <Chart dollars={getDateRange(dollars, '2015-08-27', '2016-01-21')} />
             </React.Fragment>
         )
     }

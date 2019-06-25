@@ -7,6 +7,7 @@ import {
     XAxis,
     Tooltip,
 } from 'recharts'
+import { Dollars } from '../helpers/fetchData';
 
 interface Datum {
     x: number
@@ -16,17 +17,20 @@ interface Datum {
 interface Data extends Array<Datum> { }
 
 interface Props {
-    data: Data
+    dollars: Dollars
 }
 
 export const Chart = (props: Props) => {
-    const { data } = props
+    const { dollars } = props
+    console.log('***')
+    console.log(dollars)
+    console.log('***')
     return (
         <ResponsiveContainer width={"100%"} height={400}>
-            <AreaChart data={data}>
+            <AreaChart data={dollars}>
                 <YAxis type="number" domain={['dataMin', 'dataMax']} />
                 <XAxis />
-                <Area dataKey="y" stroke="#8884d8" fill="#8884d8" />
+                <Area dataKey="value" stroke="#8884d8" fill="#8884d8" />
                 <Tooltip />
             </AreaChart>
         </ResponsiveContainer>
