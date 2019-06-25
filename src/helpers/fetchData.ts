@@ -21,15 +21,17 @@ export interface DollarsByYear {
 const endpoint = 'https://api.sbif.cl/api-sbifv3/recursos_api'
 // https://api.sbif.cl/api-sbifv3/recursos_api/dolar/2010?apikey=API_KEY&formato=json
 // https://api.sbif.cl/api-sbifv3/recursos_api/dolar?apikey=API_KEY&formato=json
+// https://api.sbif.cl/api-sbifv3/recursos_api/dolar/anteriores/2009?apikey=API_KEY&formato=json
 
 const endpointConstructor = ({
     year = '',
     format = 'json',
-    apiKey = process.env.REACT_APP_SBIF_API_KEY
-}) => (`${endpoint}/dolar${year ? '/' + year : ''}?apikey=${apiKey}&formato=${format}`)
+    apiKey = process.env.REACT_APP_SBIF_API_KEY,
+    anterior = false,
+}) => (`${endpoint}/dolar${anterior && year ? '/anteriores' : ''}${year ? '/' + year : ''}?apikey=${apiKey}&formato=${format}`)
 
 const makeSingleRequest = async function () {
-    const apiResponse: Promise<DollarsByYear> = await fetch(endpointConstructor({ year: '2010' }))
+    const apiResponse: Promise<DollarsByYear> = await fetch(endpointConstructor({ year: '2020', anterior: true }))
         .then(resp => {
             if (resp.ok) {
                 return resp.json()
