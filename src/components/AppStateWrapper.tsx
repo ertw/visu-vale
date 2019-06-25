@@ -51,6 +51,12 @@ const getDateRange = (dollars: Dollars, start: string, end: string) => {
     )
 }
 
+interface CustomWindow extends Window {
+    moment: Function
+    state: State
+}
+declare let window: CustomWindow;
+
 
 
 export class AppStateWrapper extends React.Component<Props, State> {
@@ -70,6 +76,13 @@ export class AppStateWrapper extends React.Component<Props, State> {
                 await fetchData()
             )
         })()
+        // put state and moment on window for ease of debugging
+        window.moment = moment
+    }
+
+    componentDidUpdate() {
+        // put state and moment on window for ease of debugging
+        window.state = this.state
     }
 
     render() {
@@ -81,6 +94,11 @@ export class AppStateWrapper extends React.Component<Props, State> {
         function onChange(dates: RangePickerValue, dateStrings: [string, string]) {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+        }
+        const disabledDate = (current?: moment.Moment) => {
+            return (
+                current ? current < moment('2015-01-02') : false
+            )
         }
 
         if (error) {
@@ -100,6 +118,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
                 <div>Maximum: {maximum}</div>
                 <div>Current: {justDollars[justDollars.length - 1]}</div>
                 <RangePicker
+                    disabledDate={current => (current ? current < moment('2015-01-02') : false)}
                     ranges={{
                         Today: [moment(), moment()],
                         'This Month': [moment().startOf('month'), moment().endOf('month')],
