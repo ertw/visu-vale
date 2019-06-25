@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { fetchData, Dollars } from '../helpers/fetchData'
+import { Chart } from './Chart'
 
 export interface State {
     error: any,
@@ -56,7 +57,6 @@ export class AppStateWrapper extends React.Component<Props, State> {
         const average = justDollars.reduce(sum, 0) / justDollars.length
         const minimum = justDollars.reduce(min, Infinity)
         const maximum = justDollars.reduce(max, -Infinity)
-        console.log(justDollars)
 
         if (error) {
             return (
@@ -74,9 +74,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
                 <div>Minimum: {minimum}</div>
                 <div>Maximum: {maximum}</div>
                 <div>Current: {justDollars[justDollars.length - 1]}</div>
-                <div>
-                    {dollars.map((dollar, index) => <div key={index}>{`{x: ${dollar.Fecha}, y: ${parseInt(dollar.Valor)} },`}</div>)}
-                </div>
+                <Chart data={justDollars.map((dollar, index) => ({ x: index, y: dollar }))} />
             </React.Fragment>
         )
     }
