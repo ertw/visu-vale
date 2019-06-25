@@ -14,6 +14,7 @@ export interface State {
     isLoaded: boolean,
     dollars: Dollars
     range: Dollars
+    missingDates: string[]
 }
 
 interface Props { }
@@ -24,6 +25,7 @@ export const AppContext = React.createContext(
         isLoaded: false,
         dollars: [],
         range: [],
+        missingDates: []
     } as State
 )
 
@@ -67,6 +69,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
             isLoaded: false,
             dollars: [],
             range: [],
+            missingDates: []
         }
     }
 
@@ -86,7 +89,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
     }
 
     render() {
-        const { error, isLoaded, dollars } = this.state
+        const { error, isLoaded, dollars, missingDates } = this.state
         const justDollars = dollars.map(dollar => dollar.value)
         const average = justDollars.reduce(sum, 0) / justDollars.length
         const minimum = justDollars.reduce(min, Infinity)
@@ -95,10 +98,18 @@ export class AppStateWrapper extends React.Component<Props, State> {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
         }
+        // Math.abs(moment(babyArr[23].date).diff(moment(babyArr[24].date), 'days'))
         const disabledDate = (current?: moment.Moment) => {
-            return (
-                current ? current < moment('2015-01-02') : false
-            )
+            if (current && current < moment(dollars[0].date)) {
+                return (true)
+            }
+            if (current && current > moment(dollars[dollars.length - 1].date)) {
+                return (true)
+            }
+            if (current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))) {
+                return (true)
+            }
+            return (false)
         }
 
         if (error) {
@@ -118,7 +129,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
                 <div>Maximum: {maximum}</div>
                 <div>Current: {justDollars[justDollars.length - 1]}</div>
                 <RangePicker
-                    disabledDate={current => (current ? current < moment('2015-01-02') : false)}
+                    disabledDate={disabledDate}
                     ranges={{
                         Today: [moment(), moment()],
                         'This Month': [moment().startOf('month'), moment().endOf('month')],

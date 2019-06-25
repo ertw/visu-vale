@@ -1,4 +1,5 @@
 import { State } from '../components/AppStateWrapper'
+import moment from 'moment'
 
 // API error response:
 interface ErrorResponse {
@@ -48,6 +49,21 @@ const makeSingleRequest = async function () {
     return apiResponse
 }
 
+const getMissingDates = (dollars: Dollars) => (dollars.reduce(function (accumulator: string[], currentValue, currentIndex, sourceArray) {
+    const daysFromNow = (dollar: Dollar, days: number) => (moment(dollar.date).add(days, 'day').format('YYYY-MM-DD'))
+    if (
+        currentIndex < sourceArray.length - 1 &&
+        moment(currentValue.date).diff(moment(sourceArray[currentIndex + 1].date), 'day') === -3) {
+        console.log('*')
+        return (accumulator.concat([
+            daysFromNow(currentValue, 1),
+            daysFromNow(currentValue, 2)
+        ]))
+    }
+    return accumulator
+}, []))
+
+
 export const fetchData = async (): Promise<State> => {
     try {
         // get the raw data from the api
@@ -59,6 +75,7 @@ export const fetchData = async (): Promise<State> => {
             error: null,
             dollars,
             range: [],
+            missingDates: getMissingDates(dollars)
         })
     } catch (error) {
         return ({
@@ -66,6 +83,7 @@ export const fetchData = async (): Promise<State> => {
             error,
             dollars: [],
             range: [],
+            missingDates: []
         })
     }
 }
