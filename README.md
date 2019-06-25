@@ -13,7 +13,9 @@
 
 1. Clone Repo
 1. create file `.env.local`, and add:
-* `REACT_APP_SBIF_API_KEY=<api key>`, substituting `<api key>` for your API key
+
+    `REACT_APP_SBIF_API_KEY=<api key>`, substituting `<api key>` for your API key
+
 1. Run `npm i`
 1. Run `npm start`
 
