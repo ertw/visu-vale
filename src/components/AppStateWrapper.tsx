@@ -27,6 +27,11 @@ const errorStringer = (error: Error) => {
     return (null)
 }
 
+const sum = (accumulator: number, currentValue: number) => accumulator + currentValue
+const max = (a: number, b: number) => (Math.max(a, b))
+const min = (a: number, b: number) => (Math.min(a, b))
+
+
 export class AppStateWrapper extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props)
@@ -47,6 +52,11 @@ export class AppStateWrapper extends React.Component<Props, State> {
 
     render() {
         const { error, isLoaded, dollars } = this.state
+        const justDollars = dollars.map(dollar => parseInt(dollar.Valor))
+        const average = justDollars.reduce(sum, 0) / justDollars.length
+        const minimum = justDollars.reduce(min, Infinity)
+        const maximum = justDollars.reduce(max, -Infinity)
+        console.log(justDollars)
 
         if (error) {
             return (
@@ -59,9 +69,15 @@ export class AppStateWrapper extends React.Component<Props, State> {
             )
         }
         return (
-            <div>
-                {dollars.map(dollar => dollar.Fecha)}
-            </div>
+            <React.Fragment>
+                <div>Average: {average}</div>
+                <div>Minimum: {minimum}</div>
+                <div>Maximum: {maximum}</div>
+                <div>Current: {justDollars[justDollars.length - 1]}</div>
+                <div>
+                    {dollars.map((dollar, index) => <div key={index}>{`{x: ${dollar.Fecha}, y: ${parseInt(dollar.Valor)} },`}</div>)}
+                </div>
+            </React.Fragment>
         )
     }
 }
