@@ -35,8 +35,9 @@
 |----------|---------------|------------------------|
 | React    |  project requirement |
 | Typescript |    increase velocity with compiler help; decrease defects; decrease cognative load | additional build tooling adds complexity |
-| create-react-app | increase velocity by lowering cognative load | opinionated |
+| [create-react-app](https://facebook.github.io/create-react-app/docs/adding-typescript) | increase velocity by lowering cognative load | opinionated |
 | Linux | familiarity, ease of use, pricing | may miss errors in Windows / Mac dev environments |
+| [Recharts](http://recharts.org/en-US) | tested and it works, designed for React, large adoption based on npm package use and github potpularity | unfamiliar, so I might run into unknown unknowns |
 
 ---
 
