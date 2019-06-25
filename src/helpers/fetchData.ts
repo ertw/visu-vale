@@ -50,7 +50,9 @@ const makeSingleRequest = async function () {
 
 export const fetchData = async (): Promise<State> => {
     try {
+        // get the raw data from the api
         const dollarsByYear = await makeSingleRequest()
+        // transform the data into a more convenient shape
         const dollars: Dollars = dollarsByYear.Dolares.map((dollar: RawDollar) => ({ value: parseInt(dollar.Valor), date: dollar.Fecha }))
         return ({
             isLoaded: true,
