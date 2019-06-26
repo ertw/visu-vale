@@ -2,10 +2,8 @@ import * as React from 'react'
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { DatePicker } from 'antd';
 import moment from 'moment'
-import { AppContext, } from './AppStateWrapper';
+import { AppContext, momentFormatterString } from './AppStateWrapper';
 const { RangePicker, } = DatePicker
-
-const momentFormatterString = 'YYYY-MM-DD'
 
 export const RangeSelector = () => (
     <AppContext.Consumer>
