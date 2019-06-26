@@ -19,7 +19,6 @@ export interface State {
     isLoaded: boolean,
     dollars: Dollars
     range: Dollars
-    missingDates: string[]
 }
 
 interface Props { }
@@ -84,7 +83,6 @@ export class AppStateWrapper extends React.Component<Props, State> {
             isLoaded: false,
             dollars: [],
             range: [],
-            missingDates: []
         }
     }
 
