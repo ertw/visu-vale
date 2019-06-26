@@ -106,10 +106,10 @@ export class AppStateWrapper extends React.Component<Props, State> {
             this.setState({ range: getDateRange(dollars, dateStrings[0], dateStrings[1]) })
         }
         const disabledDate = (current?: moment.Moment) => {
-            if (current && current < moment(dollars[0].date)) {
+            if (/* begining of dataset */current && current < moment(dollars[0].date)) {
                 return (true)
             }
-            if (current && current > moment(dollars[dollars.length - 1].date)) {
+            if (/* today */current && current > moment(dollars[dollars.length - 1].date)) {
                 return (true)
             }
             // significant performance penalty
