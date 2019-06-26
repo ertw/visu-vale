@@ -1,19 +1,16 @@
 import { State } from '../components/AppStateWrapper'
 import moment from 'moment'
 
-// API error response:
-interface ErrorResponse {
-    CodigoHTTP: 421 | 422 | number
-    CodigoError: 91 | number
-    Mensaje: "API key no valida" | "Entidad Improcesable" | string
-}
-
 interface RawDollar {
     Valor: string
     Fecha: string
 }
 
 interface RawDollars extends Array<RawDollar> { }
+
+interface RawDollarsByYear {
+    Dolares: RawDollars
+}
 
 export interface Dollar {
     value: number
@@ -22,14 +19,7 @@ export interface Dollar {
 
 export interface Dollars extends Array<Dollar> { }
 
-interface RawDollarsByYear {
-    Dolares: RawDollars
-}
-
 const endpoint = 'https://api.sbif.cl/api-sbifv3/recursos_api'
-// https://api.sbif.cl/api-sbifv3/recursos_api/dolar/2010?apikey=API_KEY&formato=json
-// https://api.sbif.cl/api-sbifv3/recursos_api/dolar?apikey=API_KEY&formato=json
-// https://api.sbif.cl/api-sbifv3/recursos_api/dolar/anteriores/2009?apikey=API_KEY&formato=json
 
 const endpointConstructor = ({
     year = '',
@@ -65,9 +55,9 @@ const getMissingDates = (dollars: Dollars) => (dollars.reduce(function (accumula
 
 export const fetchData = async (): Promise<State> => {
     try {
-        // get the raw data from the api
+        /* get the raw data from the api */
         const dollarsByYear = await makeSingleRequest()
-        // transform the data into a more convenient shape
+        /* transform the data into a more convenient shape */
         const dollars: Dollars = dollarsByYear.Dolares.map((dollar: RawDollar) => ({ value: parseInt(dollar.Valor), date: dollar.Fecha }))
         return ({
             isLoaded: true,
