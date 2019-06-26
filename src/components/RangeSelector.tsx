@@ -12,14 +12,9 @@ export const RangeSelector = () => (
         {value => {
             const { setRange, dollars } = value
             const onChange = (dates: RangePickerValue, dateStrings: [string, string]) => {
-                // console.log('From: ', dates[0], ', to: ', dates[1]);
-                // console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
                 const startDate = dateStrings[0] || moment().format(momentFormatterString)
                 const endDate = dateStrings[1] || moment().format(momentFormatterString)
                 if (setRange) setRange(dollars, startDate, endDate)
-                console.log('%%%%')
-                console.log(value)
-                console.log('%%%%')
             }
             const disabledDate = (current?: moment.Moment) => {
                 const startOfDataset = current && current < moment(dollars[0].date)
