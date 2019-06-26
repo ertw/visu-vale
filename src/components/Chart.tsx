@@ -27,9 +27,22 @@ export const Chart = (props: Props) => {
         <ResponsiveContainer width={"100%"} height={400}>
             <AreaChart data={dollars}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <YAxis type="number" domain={[dataMin => (dataMin - 10), 'dataMax']} />
-                <XAxis dataKey="date" tickFormatter={formatXAxis} />
-                <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#8884d8" />
+                <YAxis
+                    type="number"
+                    domain={[dataMin => (dataMin - 10), 'dataMax']}
+                    tick={false}
+                    width={0}
+                />
+                <XAxis
+                    dataKey="date"
+                    tickFormatter={formatXAxis}
+                />
+                <Area
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#8884d8"
+                    fill="#8884d8"
+                />
                 <Tooltip />
             </AreaChart>
         </ResponsiveContainer>

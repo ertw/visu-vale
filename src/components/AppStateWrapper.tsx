@@ -8,11 +8,20 @@ import {
     DatePicker,
     Statistic,
     Empty,
-    Progress,
+    Icon,
+    Spin,
+    Typography,
+    Card,
+    Avatar,
+    Skeleton,
+    Row,
+    Col,
 } from 'antd'
 import moment from 'moment'
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 const { RangePicker, } = DatePicker
+const { Title } = Typography
+const { Meta } = Card
 
 export interface State {
     error: any,
@@ -131,27 +140,46 @@ export class AppStateWrapper extends React.Component<Props, State> {
             )
         }
         if (!isLoaded) {
+            const antIcon = <Icon type="loading" style={{ fontSize: 38 }} spin />;
             return (
-                <div>LOADING EXTERNAL DATA</div>
+                <Card>
+                    <div style={{ display: 'flex' }}>
+                        <Spin indicator={antIcon} style={{ marginRight: '1rem' }} />
+                        <Title>Loading external data</Title>
+                    </div>
+                </Card>
             )
         }
+        const antIcon = <Icon type="loading" style={{ fontSize: 38 }} spin />;
         return (
             <React.Fragment>
-                <div>Average: {average}</div>
-                <div>Minimum: {minimum}</div>
-                <div>Maximum: {maximum}</div>
-                <div>Current: {justDollars[justDollars.length - 1]}</div>
-                <RangePicker
-                    disabledDate={disabledDate}
-                    ranges={{
-                        Today: [moment(), moment()],
-                        'This Month': [moment().startOf('month'), moment().endOf('month')],
-                        'This Year': [moment().startOf('year'), moment().endOf('year')],
-                        'All Data': [moment(dollars[0].date), moment()],
-                    }}
-                    onChange={onChange}
-                />
-                <Chart dollars={range} />
+                <Card>
+                    <Row gutter={16}>
+                        <Col span={8}>
+                            <Statistic title="⬆ High" value={maximum} />
+                        </Col>
+                        <Col span={8}>
+                            <Statistic title="⬇ Low" value={minimum} />
+                        </Col>
+                        <Col span={8}>
+                            <Statistic title="⇔ Average" value={average} precision={2} />
+                        </Col>
+                    </Row>
+                </Card>
+                <Card>
+                    <RangePicker
+                        disabledDate={disabledDate}
+                        ranges={{
+                            Today: [moment(), moment()],
+                            'This Month': [moment().startOf('month'), moment().endOf('month')],
+                            'This Year': [moment().startOf('year'), moment().endOf('year')],
+                            'All Data': [moment(dollars[0].date), moment()],
+                        }}
+                        onChange={onChange}
+                        style={{ marginBottom: '1rem' }}
+                    />
+                    <Chart dollars={range} />
+                </Card>
             </React.Fragment>
         )
     }

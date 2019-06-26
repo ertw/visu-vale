@@ -31,6 +31,9 @@ const makeSingleRequest = async function () {
     const apiResponse: Promise<RawDollarsByYear> = await fetch(endpointConstructor({ year: '2020', anterior: true }))
         .then(resp => {
             if (resp.ok) {
+                console.log('#####')
+                console.log(resp.headers.get('Content-Length'))
+                console.log('#####')
                 return resp.json()
             }
             throw Error(resp.statusText)
