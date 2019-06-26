@@ -22,7 +22,7 @@ export interface Dollar {
 
 export interface Dollars extends Array<Dollar> { }
 
-export interface RawDollarsByYear {
+interface RawDollarsByYear {
     Dolares: RawDollars
 }
 
