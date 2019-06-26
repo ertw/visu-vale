@@ -20,7 +20,6 @@ export const RangeSelector = () => (
                 const startOfDataset = current && current < moment(dollars[0].date)
                 const endOfDataset = current && current > moment(dollars[dollars.length - 1].date).add(1, 'day')
                 return !!(startOfDataset || endOfDataset)
-                // /* BAD PERFORMANCE! */ const datesNotPresentInDataset = current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))
             }
 
             return (
