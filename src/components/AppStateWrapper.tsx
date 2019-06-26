@@ -3,7 +3,6 @@ import {
     fetchData,
     Dollars,
 } from '../helpers/fetchData'
-import Chart from './Chart'
 import {
     LocaleProvider,
     Icon,
@@ -13,9 +12,6 @@ import {
 } from 'antd'
 import moment from 'moment'
 import { Locale } from 'antd/lib/locale-provider';
-import { RangeSelector } from './RangeSelector'
-import { Statistics } from './Statistics'
-import { LanguageSelector } from './LanguageSelector';
 const { Title } = Typography
 
 export interface State {
@@ -50,11 +46,11 @@ const getRange = (dollars: Dollars, start: string, end: string) => {
     let endIndex = getIndex(end)
     /* look up to 10 days ahead when missing data */
     for (let i = 1; startIndex === -1 && i < 10; i++) {
-        startIndex = getIndex(moment(start).add(i, 'day').format('YYYY-MM-DD'))
+        startIndex = getIndex(moment(start).add(i, 'day').format(momentFormatterString))
     }
     /* look up to 365 days behind when missing data */
     for (let i = 1; endIndex === -1 && i < 365; i++) {
-        endIndex = getIndex(moment(end).subtract(i, 'day').format('YYYY-MM-DD'))
+        endIndex = getIndex(moment(end).subtract(i, 'day').format(momentFormatterString))
     }
     return (
         dollars.slice(startIndex, endIndex + 1)
@@ -77,9 +73,9 @@ interface CustomWindow extends Window {
 }
 declare let window: CustomWindow;
 
+export const momentFormatterString = 'YYYY-MM-DD'
 
-
-class AppStateWrapper extends React.Component<Props, State> {
+export class AppStateWrapper extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -115,6 +111,7 @@ class AppStateWrapper extends React.Component<Props, State> {
             isLoaded,
             locale,
         } = this.state
+        const { children } = this.props
 
         if (error) {
             return (
@@ -135,22 +132,9 @@ class AppStateWrapper extends React.Component<Props, State> {
         return (
             <LocaleProvider locale={locale}>
                 <AppContext.Provider value={{ ...this.state }}>
-                    <React.Fragment>
-                        <Card bordered={false}>
-                            <RangeSelector />
-                            <LanguageSelector />
-                        </Card>
-                        <Card bordered={false}>
-                            <Statistics />
-                        </Card>
-                        <Card bordered={false}>
-                            <Chart />
-                        </Card>
-                    </React.Fragment>
+                    {children}
                 </AppContext.Provider>
             </LocaleProvider>
         )
     }
 }
-
-export default AppStateWrapper
