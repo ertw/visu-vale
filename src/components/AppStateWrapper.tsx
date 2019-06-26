@@ -104,7 +104,7 @@ class AppStateWrapper extends React.Component<Props, State> {
 
     componentDidUpdate() {
         if (process.env.NODE_ENV) {
-            // put state  on window for ease of debugging
+            /* put state  on window for ease of debugging */
             window.state = this.state
         }
     }
