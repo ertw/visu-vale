@@ -10,15 +10,12 @@ import {
     Spin,
     Typography,
     Card,
-    Radio,
 } from 'antd'
-import es_ES from 'antd/lib/locale-provider/es_ES';
-import en_US from 'antd/lib/locale-provider/en_US';
 import moment from 'moment'
-import { RadioChangeEvent } from 'antd/lib/radio';
 import { Locale } from 'antd/lib/locale-provider';
 import { RangeSelector } from './RangeSelector'
 import { Statistics } from './Statistics'
+import { LanguageSelector } from './LanguageSelector';
 const { Title } = Typography
 
 export interface State {
@@ -26,8 +23,9 @@ export interface State {
     isLoaded: boolean,
     dollars: Dollars
     range: Dollars
-    locale?: Locale | any
-    setRange?: any
+    setRange?: (dollars: Dollars, start: string, end: string) => void
+    locale: Locale | any
+    setLocale?: (locale: string) => void
 }
 
 interface Props { }
@@ -69,7 +67,7 @@ export const AppContext = React.createContext(
         isLoaded: false,
         dollars: [],
         range: [],
-        setRange: () => { }
+        locale: null
     } as State
 )
 
@@ -90,6 +88,7 @@ class AppStateWrapper extends React.Component<Props, State> {
             isLoaded: false,
             dollars: [],
             range: [],
+            locale: null
         }
     }
 
@@ -99,6 +98,7 @@ class AppStateWrapper extends React.Component<Props, State> {
                 await fetchData()
             )
             this.setState({ setRange: (dollars: Dollars, start: string, end: string) => this.setState({ range: getRange(dollars, start, end) }) })
+            this.setState({ setLocale: (locale: Locale['locale']) => this.setState({ locale }) })
         }
         )()
         // put state and moment on window for ease of debugging
@@ -116,10 +116,6 @@ class AppStateWrapper extends React.Component<Props, State> {
             isLoaded,
             locale,
         } = this.state
-        const changeLocale = (e: RadioChangeEvent) => {
-            const localeValue = (e.target as HTMLInputElement).value
-            this.setState({ locale: localeValue })
-        }
 
         if (error) {
             return (
@@ -143,18 +139,7 @@ class AppStateWrapper extends React.Component<Props, State> {
                     <React.Fragment>
                         <Card bordered={false}>
                             <RangeSelector />
-                            <Radio.Group
-                                defaultValue={locale}
-                                onChange={changeLocale}
-                                style={{ float: 'right' }}
-                            >
-                                <Radio.Button key="en" value={en_US}>
-                                    <span role='img' aria-label='fl-us'>🇺🇸</span> EN
-                            </Radio.Button>
-                                <Radio.Button key="es" value={es_ES}>
-                                    <span role='img' aria-label='fl-cl'>🇨🇱 </span> ES
-                            </Radio.Button>
-                            </Radio.Group>
+                            <LanguageSelector />
                         </Card>
                         <Card bordered={false}>
                             <Statistics />

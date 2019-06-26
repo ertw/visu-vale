@@ -1,4 +1,5 @@
 import { State } from '../components/AppStateWrapper'
+import es_ES from 'antd/lib/locale-provider/es_ES';
 
 interface RawDollar {
     Valor: string
@@ -52,6 +53,7 @@ export const fetchData = async (): Promise<State> => {
             error: null,
             dollars,
             range: dollars,
+            locale: es_ES
         })
     } catch (error) {
         return ({
@@ -59,6 +61,7 @@ export const fetchData = async (): Promise<State> => {
             error,
             dollars: [],
             range: [],
+            locale: es_ES
         })
     }
 }
