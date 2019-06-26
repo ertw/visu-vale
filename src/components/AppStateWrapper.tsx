@@ -73,7 +73,6 @@ export const AppContext = React.createContext(
 
 
 interface CustomWindow extends Window {
-    moment: Function
     state: State
 }
 declare let window: CustomWindow;
@@ -101,13 +100,13 @@ class AppStateWrapper extends React.Component<Props, State> {
             this.setState({ setLocale: (locale: Locale['locale']) => this.setState({ locale }) })
         }
         )()
-        // put state and moment on window for ease of debugging
-        window.moment = moment
     }
 
     componentDidUpdate() {
-        // put state and moment on window for ease of debugging
-        window.state = this.state
+        if (process.env.NODE_ENV) {
+            // put state  on window for ease of debugging
+            window.state = this.state
+        }
     }
 
     render() {
