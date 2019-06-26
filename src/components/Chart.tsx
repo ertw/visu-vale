@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { State, AppContext } from './AppStateWrapper'
+import { AppContext } from './AppStateWrapper'
 import {
     AreaChart,
     Area,
@@ -9,7 +9,6 @@ import {
     Tooltip,
     CartesianGrid,
 } from 'recharts'
-import { Dollars } from '../helpers/fetchData'
 
 const Chart = () => {
     return (
