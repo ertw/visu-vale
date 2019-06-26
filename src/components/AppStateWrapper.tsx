@@ -96,7 +96,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
             range,
             // missingDates,
         } = this.state
-        const justDollars = dollars.map(dollar => dollar.value)
+        const justDollars = range.map(dollar => dollar.value)
         const average = justDollars.reduce(sum, 0) / justDollars.length
         const minimum = justDollars.reduce(min, Infinity)
         const maximum = justDollars.reduce(max, -Infinity)
