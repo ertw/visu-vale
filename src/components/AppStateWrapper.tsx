@@ -7,13 +7,10 @@ import { Chart } from './Chart'
 import {
     DatePicker,
     Statistic,
-    Empty,
     Icon,
     Spin,
     Typography,
     Card,
-    Avatar,
-    Skeleton,
     Row,
     Col,
 } from 'antd'
@@ -21,7 +18,6 @@ import moment from 'moment'
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 const { RangePicker, } = DatePicker
 const { Title } = Typography
-const { Meta } = Card
 
 export interface State {
     error: any,
@@ -150,7 +146,6 @@ export class AppStateWrapper extends React.Component<Props, State> {
                 </Card>
             )
         }
-        const antIcon = <Icon type="loading" style={{ fontSize: 38 }} spin />;
         return (
             <React.Fragment>
                 <Card>
