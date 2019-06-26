@@ -48,8 +48,18 @@ const max = (a: number, b: number) => (Math.max(a, b))
 const min = (a: number, b: number) => (Math.min(a, b))
 const getDateRange = (dollars: Dollars, start: string, end: string) => {
     const getIndex = (date: string) => (dollars.findIndex(dollar => dollar.date === date))
+    let startIndex = getIndex(start)
+    let endIndex = getIndex(end)
+    /* look up to 10 days ahead when missing data */
+    for (let i = 1; startIndex === -1 && i < 10; i++) {
+        startIndex = getIndex(moment(start).add(i, 'day').format('YYYY-MM-DD'))
+    }
+    /* look up to 10 days behind when missing data */
+    for (let i = 1; endIndex === -1 && i < 10; i++) {
+        endIndex = getIndex(moment(end).subtract(i, 'day').format('YYYY-MM-DD'))
+    }
     return (
-        dollars.slice(getIndex(start), getIndex(end))
+        dollars.slice(startIndex, endIndex + 1)
     )
 }
 
@@ -103,7 +113,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
         const onChange = (dates: RangePickerValue, dateStrings: [string, string]) => {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-            this.setState({ range: getDateRange(dollars, dateStrings[0], dateStrings[1]) })
+            this.setState({ range: getDateRange(dollars, dateStrings[0], dateStrings[1]) || dollars })
         }
         const disabledDate = (current?: moment.Moment) => {
             const startOfDataset = current && current < moment(dollars[0].date)
