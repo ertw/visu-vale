@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { State, AppContext } from './AppStateWrapper'
 import {
     AreaChart,
     Area,
@@ -9,42 +10,36 @@ import {
     CartesianGrid,
 } from 'recharts'
 import { Dollars } from '../helpers/fetchData'
-import moment from 'moment'
 
-interface Props {
-    dollars: Dollars
-}
-
-export const Chart = (props: Props) => {
-    const { dollars } = props
-    const formatXAxis = (tickItem: string) => {
-        return (
-            moment(tickItem).format('MM YY')
-        )
-    }
-
+const Chart = () => {
     return (
-        <ResponsiveContainer width={"100%"} height={400}>
-            <AreaChart data={dollars}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <YAxis
-                    type="number"
-                    domain={[dataMin => (dataMin - 10), 'dataMax']}
-                    tick={false}
-                    width={0}
-                />
-                <XAxis
-                    dataKey="date"
-                    tickFormatter={formatXAxis}
-                />
-                <Area
-                    type="monotone"
-                    dataKey="value"
-                    stroke="#8884d8"
-                    fill="#8884d8"
-                />
-                <Tooltip />
-            </AreaChart>
-        </ResponsiveContainer>
+        < AppContext.Consumer >
+            {state => (
+                <ResponsiveContainer width={"100%"} height={400}>
+                    <AreaChart data={state.range}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <YAxis
+                            type="number"
+                            domain={[dataMin => (dataMin - 10), 'dataMax']}
+                            tick={false}
+                            width={0}
+                        />
+                        <XAxis
+                            dataKey="date"
+                            tick={false}
+                        />
+                        <Area
+                            type="monotone"
+                            dataKey="value"
+                            stroke="#8884d8"
+                            fill="#8884d8"
+                        />
+                        <Tooltip />
+                    </AreaChart>
+                </ResponsiveContainer>
+            )}
+        </AppContext.Consumer >
     )
 }
+
+export default Chart

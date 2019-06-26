@@ -1,10 +1,12 @@
 import * as React from 'react'
 import {
     fetchData,
+    Dollar,
     Dollars,
 } from '../helpers/fetchData'
-import { Chart } from './Chart'
+import Chart from './Chart'
 import {
+    LocaleProvider,
     DatePicker,
     Statistic,
     Icon,
@@ -13,9 +15,15 @@ import {
     Card,
     Row,
     Col,
+    Radio,
 } from 'antd'
+import es_ES from 'antd/lib/locale-provider/es_ES';
+import en_US from 'antd/lib/locale-provider/en_US';
 import moment from 'moment'
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
+import { RadioChangeEvent } from 'antd/lib/radio';
+import { Locale } from 'antd/lib/locale-provider';
+import { RangeSelector } from './RangeSelector'
 const { RangePicker, } = DatePicker
 const { Title } = Typography
 
@@ -24,19 +32,11 @@ export interface State {
     isLoaded: boolean,
     dollars: Dollars
     range: Dollars
+    locale?: Locale | any
+    setRange?: any
 }
 
 interface Props { }
-
-export const AppContext = React.createContext(
-    {
-        error: null,
-        isLoaded: false,
-        dollars: [],
-        range: [],
-        missingDates: []
-    } as State
-)
 
 const errorStringer = (error: Error) => {
     if (error.message === '421') {
@@ -52,10 +52,7 @@ const errorStringer = (error: Error) => {
     return (null)
 }
 
-const sum = (accumulator: number, currentValue: number) => accumulator + currentValue
-const max = (a: number, b: number) => (Math.max(a, b))
-const min = (a: number, b: number) => (Math.min(a, b))
-const getDateRange = (dollars: Dollars, start: string, end: string) => {
+const getRange = (dollars: Dollars, start: string, end: string) => {
     const getIndex = (date: string) => (dollars.findIndex(dollar => dollar.date === date))
     let startIndex = getIndex(start)
     let endIndex = getIndex(end)
@@ -72,6 +69,20 @@ const getDateRange = (dollars: Dollars, start: string, end: string) => {
     )
 }
 
+export const AppContext = React.createContext(
+    {
+        error: null,
+        isLoaded: false,
+        dollars: [],
+        range: [],
+        setRange: () => { }
+    } as State
+)
+
+const sum = (accumulator: number, currentValue: number) => accumulator + currentValue
+const max = (a: number, b: number) => (Math.max(a, b))
+const min = (a: number, b: number) => (Math.min(a, b))
+
 interface CustomWindow extends Window {
     moment: Function
     state: State
@@ -80,7 +91,7 @@ declare let window: CustomWindow;
 
 
 
-export class AppStateWrapper extends React.Component<Props, State> {
+class AppStateWrapper extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -96,7 +107,9 @@ export class AppStateWrapper extends React.Component<Props, State> {
             this.setState(
                 await fetchData()
             )
-        })()
+            this.setState({ setRange: (dollars: Dollars, start: string, end: string) => this.setState({ range: getRange(dollars, start, end) }) })
+        }
+        )()
         // put state and moment on window for ease of debugging
         window.moment = moment
     }
@@ -112,22 +125,17 @@ export class AppStateWrapper extends React.Component<Props, State> {
             isLoaded,
             dollars,
             range,
-            // missingDates,
+            setRange,
+            locale,
         } = this.state
-        const justDollars = range.map(dollar => dollar.value)
-        const average = justDollars.reduce(sum, 0) / justDollars.length
-        const minimum = justDollars.reduce(min, Infinity)
-        const maximum = justDollars.reduce(max, -Infinity)
-        const onChange = (dates: RangePickerValue, dateStrings: [string, string]) => {
-            console.log('From: ', dates[0], ', to: ', dates[1]);
-            console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-            this.setState({ range: getDateRange(dollars, dateStrings[0], dateStrings[1]) || dollars })
-        }
-        const disabledDate = (current?: moment.Moment) => {
-            const startOfDataset = current && current < moment(dollars[0].date)
-            const endOfDataset = current && current > moment(dollars[dollars.length - 1].date).add(1, 'day')
-            return !!(startOfDataset || endOfDataset)
-            // /* BAD PERFORMANCE! */ const datesNotPresentInDataset = current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))
+
+        const val = this.context
+        console.log('****')
+        console.log(val)
+        console.log('****')
+        const changeLocale = (e: RadioChangeEvent) => {
+            const localeValue = (e.target as HTMLInputElement).value
+            this.setState({ locale: localeValue })
         }
 
         if (error) {
@@ -138,7 +146,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
         if (!isLoaded) {
             const antIcon = <Icon type="loading" style={{ fontSize: 38 }} spin />;
             return (
-                <Card>
+                <Card bordered={false}>
                     <div style={{ display: 'flex' }}>
                         <Spin indicator={antIcon} style={{ marginRight: '1rem' }} />
                         <Title>Loading external data</Title>
@@ -147,35 +155,66 @@ export class AppStateWrapper extends React.Component<Props, State> {
             )
         }
         return (
-            <React.Fragment>
-                <Card>
-                    <Row gutter={16}>
-                        <Col span={8}>
-                            <Statistic title="⬆ High" value={maximum} />
-                        </Col>
-                        <Col span={8}>
-                            <Statistic title="⬇ Low" value={minimum} />
-                        </Col>
-                        <Col span={8}>
-                            <Statistic title="⇔ Average" value={average} precision={2} />
-                        </Col>
-                    </Row>
-                </Card>
-                <Card>
-                    <RangePicker
-                        disabledDate={disabledDate}
-                        ranges={{
-                            Today: [moment(), moment()],
-                            'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            'This Year': [moment().startOf('year'), moment().endOf('year')],
-                            'All Data': [moment(dollars[0].date), moment()],
-                        }}
-                        onChange={onChange}
-                        style={{ marginBottom: '1rem' }}
-                    />
-                    <Chart dollars={range} />
-                </Card>
-            </React.Fragment>
+            <LocaleProvider locale={locale}>
+                <AppContext.Provider value={{ ...this.state }}>
+                    <React.Fragment>
+                        <Card bordered={false}>
+                            <RangeSelector />
+                            <Radio.Group
+                                defaultValue={locale}
+                                onChange={changeLocale}
+                                style={{ float: 'right' }}
+                            >
+                                <Radio.Button key="en" value={en_US}>
+                                    <span role='img' aria-label='fl-us'>🇺🇸</span> EN
+                            </Radio.Button>
+                                <Radio.Button key="es" value={es_ES}>
+                                    <span role='img' aria-label='fl-cl'>🇨🇱 </span> ES
+                            </Radio.Button>
+                            </Radio.Group>
+                        </Card>
+                        <Card bordered={false}>
+                        </Card>
+                        <Card bordered={false}>
+                            <Chart />
+                        </Card>
+                    </React.Fragment>
+                </AppContext.Provider>
+            </LocaleProvider>
         )
     }
 }
+
+/*
+export const withAppContext = <P extends object>(Component: React.ComponentType<P>) => {
+    return function WrapperComponent(props: React.ComponentType<P>) {
+        return (
+            <AppContext.Consumer>
+                {state => <Component {...props as P} context={state} />}
+            </AppContext.Consumer>
+        );
+    };
+}
+*/
+
+export const withAppContexts = <P extends object>(Component: React.ComponentType<P>) => {
+    return (props: React.FC<P>) => {
+        return (
+            <AppContext.Consumer>
+                {({ isLoaded, error, dollars, range, locale }: State) => {
+                    return <Component
+                        {...props as P}
+                        locale={locale}
+                        isLoaded={isLoaded}
+                        error={error}
+                        dollars={dollars}
+                        range={range}
+                    />;
+                }}
+            </AppContext.Consumer>
+        );
+    };
+};
+
+AppStateWrapper.contextType = AppContext
+export default AppStateWrapper

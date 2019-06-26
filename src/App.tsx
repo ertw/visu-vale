@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppStateWrapper } from './components/AppStateWrapper'
+import AppStateWrapper from './components/AppStateWrapper'
 import './App.css'
 
 const App: React.FC = () => {
