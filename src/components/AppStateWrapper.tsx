@@ -106,17 +106,10 @@ export class AppStateWrapper extends React.Component<Props, State> {
             this.setState({ range: getDateRange(dollars, dateStrings[0], dateStrings[1]) })
         }
         const disabledDate = (current?: moment.Moment) => {
-            if (/* begining of dataset */current && current < moment(dollars[0].date)) {
-                return (true)
-            }
-            if (/* today */current && current > moment(dollars[dollars.length - 1].date)) {
-                return (true)
-            }
-            // significant performance penalty
-            // if (current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))) {
-            // return (true)
-            // }
-            return (false)
+            const startOfDataset = current && current < moment(dollars[0].date)
+            const endOfDataset = current && current > moment(dollars[dollars.length - 1].date)
+            return !!(startOfDataset || endOfDataset)
+            // /* BAD PERFORMANCE! */ const datesNotPresentInDataset = current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))
         }
 
         if (error) {
