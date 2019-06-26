@@ -32,6 +32,7 @@
 * Linting:
   * vscode default formatter
   * Markdown linted with [markdownlint](https://github.com/DavidAnson/markdownlint)
+* Components, Interfaces, and Types are PascalCase, functions, variables, and CSS classnames are camelCase
 
 ---
 
