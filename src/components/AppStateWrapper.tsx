@@ -9,7 +9,7 @@ import {
     Statistic,
     Empty,
     Progress,
-    } from 'antd'
+} from 'antd'
 import moment from 'moment'
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 const { RangePicker, } = DatePicker
