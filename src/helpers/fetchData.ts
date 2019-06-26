@@ -1,5 +1,4 @@
 import { State } from '../components/AppStateWrapper'
-import en_US from 'antd/lib/locale-provider/en_US';
 
 interface RawDollar {
     Valor: string
