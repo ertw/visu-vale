@@ -4,7 +4,12 @@ import {
     Dollars,
 } from '../helpers/fetchData'
 import { Chart } from './Chart'
-import { DatePicker, } from 'antd'
+import {
+    DatePicker,
+    Statistic,
+    Empty,
+    Progress,
+    } from 'antd'
 import moment from 'moment'
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 const { RangePicker, } = DatePicker

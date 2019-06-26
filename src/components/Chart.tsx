@@ -6,6 +6,7 @@ import {
     YAxis,
     XAxis,
     Tooltip,
+    CartesianGrid,
 } from 'recharts'
 import { Dollars } from '../helpers/fetchData'
 import moment from 'moment'
@@ -25,9 +26,10 @@ export const Chart = (props: Props) => {
     return (
         <ResponsiveContainer width={"100%"} height={400}>
             <AreaChart data={dollars}>
-                <YAxis type="number" domain={['dataMin', 'dataMax']} />
+                <CartesianGrid strokeDasharray="3 3" />
+                <YAxis type="number" domain={[dataMin => (dataMin - 10), 'dataMax']} />
                 <XAxis dataKey="date" tickFormatter={formatXAxis} />
-                <Area dataKey="value" stroke="#8884d8" fill="#8884d8" />
+                <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#8884d8" />
                 <Tooltip />
             </AreaChart>
         </ResponsiveContainer>
