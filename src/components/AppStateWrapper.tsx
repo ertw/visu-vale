@@ -1,30 +1,24 @@
 import * as React from 'react'
 import {
     fetchData,
-    Dollar,
     Dollars,
 } from '../helpers/fetchData'
 import Chart from './Chart'
 import {
     LocaleProvider,
-    DatePicker,
-    Statistic,
     Icon,
     Spin,
     Typography,
     Card,
-    Row,
-    Col,
     Radio,
 } from 'antd'
 import es_ES from 'antd/lib/locale-provider/es_ES';
 import en_US from 'antd/lib/locale-provider/en_US';
 import moment from 'moment'
-import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { Locale } from 'antd/lib/locale-provider';
 import { RangeSelector } from './RangeSelector'
-const { RangePicker, } = DatePicker
+import { Statistics } from './Statistics'
 const { Title } = Typography
 
 export interface State {
@@ -79,9 +73,6 @@ export const AppContext = React.createContext(
     } as State
 )
 
-const sum = (accumulator: number, currentValue: number) => accumulator + currentValue
-const max = (a: number, b: number) => (Math.max(a, b))
-const min = (a: number, b: number) => (Math.min(a, b))
 
 interface CustomWindow extends Window {
     moment: Function
@@ -123,16 +114,8 @@ class AppStateWrapper extends React.Component<Props, State> {
         const {
             error,
             isLoaded,
-            dollars,
-            range,
-            setRange,
             locale,
         } = this.state
-
-        const val = this.context
-        console.log('****')
-        console.log(val)
-        console.log('****')
         const changeLocale = (e: RadioChangeEvent) => {
             const localeValue = (e.target as HTMLInputElement).value
             this.setState({ locale: localeValue })
@@ -174,6 +157,7 @@ class AppStateWrapper extends React.Component<Props, State> {
                             </Radio.Group>
                         </Card>
                         <Card bordered={false}>
+                            <Statistics />
                         </Card>
                         <Card bordered={false}>
                             <Chart />
@@ -185,36 +169,4 @@ class AppStateWrapper extends React.Component<Props, State> {
     }
 }
 
-/*
-export const withAppContext = <P extends object>(Component: React.ComponentType<P>) => {
-    return function WrapperComponent(props: React.ComponentType<P>) {
-        return (
-            <AppContext.Consumer>
-                {state => <Component {...props as P} context={state} />}
-            </AppContext.Consumer>
-        );
-    };
-}
-*/
-
-export const withAppContexts = <P extends object>(Component: React.ComponentType<P>) => {
-    return (props: React.FC<P>) => {
-        return (
-            <AppContext.Consumer>
-                {({ isLoaded, error, dollars, range, locale }: State) => {
-                    return <Component
-                        {...props as P}
-                        locale={locale}
-                        isLoaded={isLoaded}
-                        error={error}
-                        dollars={dollars}
-                        range={range}
-                    />;
-                }}
-            </AppContext.Consumer>
-        );
-    };
-};
-
-AppStateWrapper.contextType = AppContext
 export default AppStateWrapper
