@@ -89,14 +89,21 @@ export class AppStateWrapper extends React.Component<Props, State> {
     }
 
     render() {
-        const { error, isLoaded, dollars, missingDates } = this.state
+        const {
+            error,
+            isLoaded,
+            dollars,
+            range,
+            // missingDates,
+        } = this.state
         const justDollars = dollars.map(dollar => dollar.value)
         const average = justDollars.reduce(sum, 0) / justDollars.length
         const minimum = justDollars.reduce(min, Infinity)
         const maximum = justDollars.reduce(max, -Infinity)
-        function onChange(dates: RangePickerValue, dateStrings: [string, string]) {
+        const onChange = (dates: RangePickerValue, dateStrings: [string, string]) => {
             console.log('From: ', dates[0], ', to: ', dates[1]);
             console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+            this.setState({ range: getDateRange(dollars, dateStrings[0], dateStrings[1]) })
         }
         const disabledDate = (current?: moment.Moment) => {
             if (current && current < moment(dollars[0].date)) {
@@ -105,9 +112,10 @@ export class AppStateWrapper extends React.Component<Props, State> {
             if (current && current > moment(dollars[dollars.length - 1].date)) {
                 return (true)
             }
-            if (current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))) {
-                return (true)
-            }
+            // significant performance penalty
+            // if (current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))) {
+            // return (true)
+            // }
             return (false)
         }
 
@@ -135,7 +143,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
                     }}
                     onChange={onChange}
                 />
-                <Chart dollars={getDateRange(dollars, '2015-08-27', '2016-01-21')} />
+                <Chart dollars={range} />
             </React.Fragment>
         )
     }

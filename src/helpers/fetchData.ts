@@ -54,7 +54,6 @@ const getMissingDates = (dollars: Dollars) => (dollars.reduce(function (accumula
     if (
         currentIndex < sourceArray.length - 1 &&
         moment(currentValue.date).diff(moment(sourceArray[currentIndex + 1].date), 'day') === -3) {
-        console.log('*')
         return (accumulator.concat([
             daysFromNow(currentValue, 1),
             daysFromNow(currentValue, 2)
@@ -74,7 +73,7 @@ export const fetchData = async (): Promise<State> => {
             isLoaded: true,
             error: null,
             dollars,
-            range: [],
+            range: dollars,
             missingDates: getMissingDates(dollars)
         })
     } catch (error) {

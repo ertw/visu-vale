@@ -17,7 +17,6 @@ interface Props {
 export const Chart = (props: Props) => {
     const { dollars } = props
     const formatXAxis = (tickItem: string) => {
-        console.log(tickItem)
         return (
             moment(tickItem).format('MM YY')
         )
