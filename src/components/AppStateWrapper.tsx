@@ -54,8 +54,8 @@ const getDateRange = (dollars: Dollars, start: string, end: string) => {
     for (let i = 1; startIndex === -1 && i < 10; i++) {
         startIndex = getIndex(moment(start).add(i, 'day').format('YYYY-MM-DD'))
     }
-    /* look up to 10 days behind when missing data */
-    for (let i = 1; endIndex === -1 && i < 10; i++) {
+    /* look up to 365 days behind when missing data */
+    for (let i = 1; endIndex === -1 && i < 365; i++) {
         endIndex = getIndex(moment(end).subtract(i, 'day').format('YYYY-MM-DD'))
     }
     return (
@@ -117,7 +117,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
         }
         const disabledDate = (current?: moment.Moment) => {
             const startOfDataset = current && current < moment(dollars[0].date)
-            const endOfDataset = current && current > moment(dollars[dollars.length - 1].date)
+            const endOfDataset = current && current > moment(dollars[dollars.length - 1].date).add(1, 'day')
             return !!(startOfDataset || endOfDataset)
             // /* BAD PERFORMANCE! */ const datesNotPresentInDataset = current && missingDates.find(missingDate => missingDate === moment(current).format('YYYY-MM-DD'))
         }
@@ -143,6 +143,8 @@ export class AppStateWrapper extends React.Component<Props, State> {
                     ranges={{
                         Today: [moment(), moment()],
                         'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'This Year': [moment().startOf('year'), moment().endOf('year')],
+                        'All Data': [moment(dollars[0].date), moment()],
                     }}
                     onChange={onChange}
                 />
