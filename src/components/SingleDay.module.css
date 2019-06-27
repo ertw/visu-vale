@@ -1,0 +1,14 @@
+.singleDay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prefix,
+.suffix {
+    font-size: 10vw;
+}
+
+.value {
+    font-size: 20vw;
+}

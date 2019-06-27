@@ -1,15 +1,6 @@
 import * as React from 'react'
-import {
-    Statistic,
-} from 'antd';
 import { AppContext } from './AppStateWrapper'
-
-interface LocalizedAppValue {
-    [key: string]: {
-        en_US: string
-        es_ES: string
-    }
-}
+import styles from './SingleDay.module.css'
 
 export const SingleDay = () => {
     return (
@@ -19,12 +10,17 @@ export const SingleDay = () => {
                 const day = range[0] || 'error'
 
                 return (
-                    <Statistic
-                        title={day.date}
-                        value={day.value}
-                        prefix='$'
-                        suffix='CLP'
-                    />
+                    <div className={styles.singleDay}>
+                        <span className={styles.prefix}>
+                            $
+                            </span>
+                        <span className={styles.value}>
+                            {day.value}
+                        </span>
+                        <span className={styles.suffix}>
+                            CLP
+                            </span>
+                    </div>
                 )
             }}
         </AppContext.Consumer>
