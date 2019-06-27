@@ -35,8 +35,7 @@ export const RangeSelector = () => (
                         [rangepickerAll]: [moment(dollars[0].date), moment()],
                     }}
                     onChange={onChange}
-                    style={{ marginBottom: '1rem', float: 'left' }}
-                    defaultValue={[moment(), moment()]}
+                    defaultValue={[moment(dollars[0].date), moment()]}
                 />
             )
         }}
