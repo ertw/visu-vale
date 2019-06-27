@@ -5,11 +5,12 @@ import {
 } from '../helpers/fetchData'
 import {
     LocaleProvider,
-    Typography,
+    Card,
 } from 'antd'
 import moment from 'moment'
 import { Locale } from 'antd/lib/locale-provider';
 import { Loading } from './Loading';
+import es_ES from 'antd/lib/locale-provider/es_ES';
 
 export interface State {
     error: any,
@@ -60,7 +61,7 @@ export const AppContext = React.createContext(
         isLoaded: false,
         dollars: [],
         range: [],
-        locale: null
+        locale: es_ES
     } as State
 )
 
@@ -80,7 +81,7 @@ export class AppStateWrapper extends React.Component<Props, State> {
             isLoaded: false,
             dollars: [],
             range: [],
-            locale: null
+            locale: es_ES
         }
     }
 
@@ -117,7 +118,9 @@ export class AppStateWrapper extends React.Component<Props, State> {
         }
         if (!isLoaded) {
             return (
-                <Loading />
+                <Card bordered={false}>
+                    <Loading />
+                </Card>
             )
         }
         return (

@@ -4,6 +4,7 @@ import { AppContext, } from './AppStateWrapper';
 import es_ES from 'antd/lib/locale-provider/es_ES';
 import en_US from 'antd/lib/locale-provider/en_US';
 import { RadioChangeEvent } from 'antd/lib/radio';
+import styles from './LanguageSelector.module.css'
 
 export const LanguageSelector = () => (
     <AppContext.Consumer>
@@ -17,7 +18,7 @@ export const LanguageSelector = () => (
                 <Radio.Group
                     defaultValue={locale}
                     onChange={changeLocale}
-                    style={{ float: 'right' }}
+                    className={styles.languageSelector}
                 >
                     <Radio.Button key="en" value={en_US}>
                         <span role='img' aria-label='fl-us'>🇺🇸</span> EN
