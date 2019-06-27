@@ -1,10 +1,11 @@
 import React from 'react';
-import { AppStateWrapper } from './components/AppStateWrapper'
+import { AppStateWrapper, AppContext } from './components/AppStateWrapper'
 import './App.css'
 import { Card } from 'antd';
 import { RangeSelector } from './components/RangeSelector';
 import { LanguageSelector } from './components/LanguageSelector';
 import { Statistics } from './components/Statistics';
+import { SingleDay } from './components/SingleDay'
 import Chart from './components/Chart';
 
 const App: React.FC = () => {
@@ -16,12 +17,26 @@ const App: React.FC = () => {
             <RangeSelector />
             <LanguageSelector />
           </Card>
-          <Card bordered={false}>
-            <Statistics />
-          </Card>
-          <Card bordered={false}>
-            <Chart />
-          </Card>
+          <AppContext.Consumer>
+            {value => {
+              const { range } = value
+              return (
+                range.length === 1 ?
+                  <Card bordered={false}>
+                    <SingleDay />
+                  </Card>
+                  :
+                  <React.Fragment>
+                    <Card bordered={false}>
+                      <Statistics />
+                    </Card>
+                    <Card bordered={false}>
+                      <Chart />
+                    </Card>
+                  </React.Fragment>
+              )
+            }}
+          </AppContext.Consumer>
         </React.Fragment>
       </AppStateWrapper>
     </div>
