@@ -36,13 +36,28 @@ export const Statistics = () => {
                 return (
                     <Row gutter={16}>
                         <Col span={8}>
-                            <Statistic title={`⬆ ${locale === 'es' ? text.statisticTitleHigh.es_ES : text.statisticTitleHigh.en_US}`} value={maximum} />
+                            <Statistic
+                                title={`⬆ ${locale === 'es' ? text.statisticTitleHigh.es_ES : text.statisticTitleHigh.en_US}`}
+                                value={maximum}
+                                prefix='$'
+                                suffix='CLP'
+                            />
                         </Col>
                         <Col span={8}>
-                            <Statistic title={`⬇ ${locale === 'es' ? text.statisticTitleLow.es_ES : text.statisticTitleLow.en_US}`} value={minimum} />
+                            <Statistic
+                                title={`⬇ ${locale === 'es' ? text.statisticTitleLow.es_ES : text.statisticTitleLow.en_US}`}
+                                value={minimum}
+                                prefix='$'
+                                suffix='CLP'
+                            />
                         </Col>
                         <Col span={8}>
-                            <Statistic title={`⇔ ${locale === 'es' ? text.statisticTitleAverage.es_ES : text.statisticTitleAverage.en_US}`} value={average} precision={2} />
+                            <Statistic
+                                title={`⇔ ${locale === 'es' ? text.statisticTitleAverage.es_ES : text.statisticTitleAverage.en_US}`}
+                                value={average} precision={2}
+                                prefix='$'
+                                suffix='CLP'
+                            />
                         </Col>
                     </Row>
                 )
