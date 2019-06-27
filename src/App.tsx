@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppStateWrapper, AppContext } from './components/AppStateWrapper'
 import './App.css'
-import { Card } from 'antd';
+import { Card, } from 'antd';
 import { RangeSelector } from './components/RangeSelector';
 import { LanguageSelector } from './components/LanguageSelector';
 import { Statistics } from './components/Statistics';
@@ -15,7 +15,6 @@ const App: React.FC = () => {
         <React.Fragment>
           <Card bordered={false}>
             <RangeSelector />
-            <LanguageSelector />
           </Card>
           <AppContext.Consumer>
             {value => {
@@ -32,6 +31,9 @@ const App: React.FC = () => {
                     </Card>
                     <Card bordered={false}>
                       <Chart />
+                    </Card>
+                    <Card bordered={false}>
+                      <LanguageSelector />
                     </Card>
                   </React.Fragment>
               )
