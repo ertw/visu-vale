@@ -5,14 +5,11 @@ import {
 } from '../helpers/fetchData'
 import {
     LocaleProvider,
-    Icon,
-    Spin,
     Typography,
-    Card,
 } from 'antd'
 import moment from 'moment'
 import { Locale } from 'antd/lib/locale-provider';
-const { Title } = Typography
+import { Loading } from './Loading';
 
 export interface State {
     error: any,
@@ -119,14 +116,8 @@ export class AppStateWrapper extends React.Component<Props, State> {
             )
         }
         if (!isLoaded) {
-            const antIcon = <Icon type="loading" style={{ fontSize: 38 }} spin />;
             return (
-                <Card bordered={false}>
-                    <div style={{ display: 'flex' }}>
-                        <Spin indicator={antIcon} style={{ marginRight: '1rem' }} />
-                        <Title>Loading external data</Title>
-                    </div>
-                </Card>
+                <Loading />
             )
         }
         return (
